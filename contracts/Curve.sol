@@ -23,6 +23,8 @@ abstract contract Curve is IERC721, IERC721Enumerable {
     // but useful to know off-hand. Especially because this.balance might not be the same as the actual reserve
     uint256 public reserve;
 
+    uint nextTokenId;
+
     address payable public creator;
 
     event Minted(uint256 indexed tokenId, uint256 indexed pricePaid, uint256 indexed reserveAfterMint);
@@ -36,6 +38,7 @@ abstract contract Curve is IERC721, IERC721Enumerable {
     constructor (address payable _creator) {
         creator = _creator;
         reserve = 0;
+        nextTokenId = 1;
     }
 
     /*
@@ -61,14 +64,16 @@ abstract contract Curve is IERC721, IERC721Enumerable {
         require(msg.value >= mintPrice, "C: Not enough ETH sent");
 
         // mint first to increase supply.
-        uint256 tokenId = onMint();
+        uint256 tokenId = nextTokenId;
+        nextTokenId++;
+        onMint(tokenId);
 
         // disburse
         uint256 reserveCut = getReserveCut();
         reserve = reserve.add(reserveCut);
         creator.transfer(mintPrice.sub(reserveCut)); // 0.5%
 
-        if(msg.value.sub(mintPrice) > 0) {
+        if (msg.value.sub(mintPrice) > 0) {
             msg.sender.transfer(msg.value.sub(mintPrice)); // excess/padding/buffer
         }
 
@@ -106,6 +111,6 @@ abstract contract Curve is IERC721, IERC721Enumerable {
         return burnPrice;
     }
 
-    function onMint() internal virtual returns (uint256 tokenId);
+    function onMint(uint256 tokenId) internal virtual;
     function onBurn(uint256 tokenId) internal virtual;
 }
