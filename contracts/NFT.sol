@@ -147,4 +147,7 @@ contract NFT is ERC721("Go forth and bond", "BONDLOVE"), Ownable, Curve {
         _setBaseURI(baseURI);
     }
 
+    function setCreator(address payable a) public onlyOwner {
+        creator = a;
+    }
 }
