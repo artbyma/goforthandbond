@@ -8,13 +8,14 @@ import "openzeppelin-solidity/contracts/token/ERC721/IERC721Receiver.sol";
 import "openzeppelin-solidity/contracts/token/ERC721/ERC721.sol";
 import "openzeppelin-solidity/contracts/introspection/ERC165.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
+import "openzeppelin-solidity/contracts/access/Ownable.sol";
 import "./Curve.sol";
 
 
-contract NFT is ERC721("Go forth and bond", "BONDLOVE"), Curve {
+contract NFT is ERC721("Go forth and bond", "BONDLOVE"), Ownable, Curve {
     using SafeMath for uint256;
 
-    uint256 MAX_TOKENS_PER_PIECE = 10;
+    uint256 MAX_TOKENS_PER_PIECE = 9;
 
     // Each token owns one piece. Only a limited number of tokens can own a
     // single piece.  A new piece is created once the previous one is full.
@@ -27,6 +28,9 @@ contract NFT is ERC721("Go forth and bond", "BONDLOVE"), Curve {
 
     mapping(uint256 => Piece) pieces;
     uint256 public numPieces = 0;
+
+    // Store the code to render on-chain.
+    string public renderScriptCode;
 
     constructor() Curve(msg.sender) {
     }
@@ -84,5 +88,11 @@ contract NFT is ERC721("Go forth and bond", "BONDLOVE"), Curve {
 
     function onBurn(uint256 tokenId) internal override {
         _burn(tokenId);
+    }
+
+    // Public API
+
+    function setCode(string calldata code) public onlyOwner {
+        renderScriptCode = code;
     }
 }
