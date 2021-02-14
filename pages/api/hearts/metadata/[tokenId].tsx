@@ -1,4 +1,4 @@
-import {getContract} from "../../../../lib/getContract";
+import {getContract} from "../../../../lib/getContractServer";
 import {getHeartPieceByToken} from "../../../../lib/getHeartPiece";
 import {NextApiRequest} from "next";
 

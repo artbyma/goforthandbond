@@ -1,17 +1,17 @@
 import {ethers} from "ethers";
+import {useWeb3React} from "./web3wallet/core";
 
 
-// const provider = new ethers.providers.InfuraProvider(
-//     'rinkeby', '134faaf6c8b64741b67fce6ae1683183');
-
-const provider = new ethers.providers.JsonRpcProvider("http://127.0.0.1:8545/");
-
-export function getContract() {
-  return new ethers.Contract(process.env.NEXT_PUBLIC_NFT_ADDRESS, abi, provider);
+export function useContract() {
+  const { library, active } = useWeb3React();
+  if (!library || !active) {
+    return null;
+  }
+  return new ethers.Contract(process.env.NEXT_PUBLIC_NFT_ADDRESS, nftAbi, library);
 }
 
 
-const abi = [
+export const nftAbi = [
   {
     "inputs": [],
     "stateMutability": "nonpayable",

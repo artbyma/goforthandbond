@@ -1,4 +1,4 @@
-import {getContract} from "../../../../lib/getContract";
+import {getContract} from "../../../../lib/getContractServer";
 import {getHeartPiece} from "../../../../lib/getHeartPiece";
 import fs from 'fs';
 import path from 'path';

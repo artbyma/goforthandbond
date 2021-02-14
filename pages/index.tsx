@@ -4,8 +4,10 @@ import { css, jsx } from '@emotion/react'
 import { Fragment } from 'react';
 import {useAsyncValue} from "../lib/useAsyncValue";
 import {formatEther} from "ethers/lib/utils";
+import {PurchaseButton} from "../lib/PurchaseButton";
 
-function HomePage() {
+
+export default function HomePage() {
   return  <div css={css`
     max-width: 1000px;
     margin: 0 auto;
@@ -25,7 +27,7 @@ function HomePage() {
     <h1 css={css`
       font-family: 'Amatic SC', cursive;
       font-size: 55px;
-      margin-top: 0em;
+      margin-top: 0;
       margin-bottom: 0.2em;
     `}>
       Love on a Curve
@@ -90,7 +92,7 @@ function HomePage() {
         `}>
           <Stats />
         </div>
-        <Button>Connect Wallet</Button>
+        <PurchaseButton />
       </div>
     </div>
     <div css={css`
@@ -185,21 +187,3 @@ function Stats(props: any) {
     </div>
   </Fragment>
 }
-
-
-function Button(props: {
-  children: any
-}) {
-  return <button css={css`
-    border: 0;
-    background: #433c3c;
-    color: white;
-    padding: 0.4em 0.4em;
-    font-size: 22px;
-    border-radius: 2px;
-  `}>
-    {props.children}
-  </button>
-}
-
-export default HomePage

@@ -1,4 +1,4 @@
-import {getContract} from "../../../lib/getContract";
+import {getContract} from "../../../lib/getContractServer";
 
 export default async function handler(req, res) {
   const contract = getContract();

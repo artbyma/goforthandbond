@@ -12,11 +12,20 @@
   "license": "ISC",
   "dependencies": {
     "@emotion/react": "^11.1.5",
+    "@emotion/styled": "^11.1.5",
+    "@web3-react/injected-connector": "^6.0.7",
+    "@web3-react/lattice-connector": "^6.1.8",
+    "@web3-react/ledger-connector": "^6.1.1",
+    "@web3-react/torus-connector": "^6.1.7",
+    "@web3-react/trezor-connector": "^6.1.6",
+    "@web3-react/walletconnect-connector": "^6.1.6",
+    "@web3-react/walletlink-connector": "^6.1.6",
     "fluent-ffmpeg": "^2.1.2",
     "next": "^10.0.6",
     "openzeppelin-solidity": "^3.4.0",
     "react": "^17.0.1",
-    "react-dom": "^17.0.1"
+    "react-dom": "^17.0.1",
+    "url-loader": "^4.1.1"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.1",
