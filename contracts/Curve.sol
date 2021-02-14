@@ -27,8 +27,8 @@ abstract contract Curve is IERC721, IERC721Enumerable {
 
     address payable public creator;
 
-    event Minted(uint256 indexed tokenId, uint256 indexed pricePaid, uint256 indexed reserveAfterMint);
-    event Burned(uint256 indexed tokenId, uint256 indexed priceReceived, uint256 indexed reserveAfterBurn);
+    event Minted(uint256 indexed tokenId, uint256 indexed pieceId, uint256 pricePaid, uint256 indexed reserveAfterMint);
+    event Burned(uint256 indexed tokenId, uint256 indexed pieceId, uint256 priceReceived, uint256 indexed reserveAfterBurn);
 
     /*
     todo: 
@@ -66,7 +66,7 @@ abstract contract Curve is IERC721, IERC721Enumerable {
         // mint first to increase supply.
         uint256 tokenId = nextTokenId;
         nextTokenId++;
-        onMint(tokenId);
+        uint256 pieceId = onMint(tokenId);
 
         // disburse
         uint256 reserveCut = getReserveCut();
@@ -77,7 +77,7 @@ abstract contract Curve is IERC721, IERC721Enumerable {
             msg.sender.transfer(msg.value.sub(mintPrice)); // excess/padding/buffer
         }
 
-        emit Minted(tokenId, mintPrice, reserve);
+        emit Minted(tokenId, pieceId, mintPrice, reserve);
 
         return tokenId; // returns tokenId in case its useful to check it
     }
@@ -86,12 +86,12 @@ abstract contract Curve is IERC721, IERC721Enumerable {
         require(msg.sender == this.ownerOf(tokenId), "not-owner");
 
         uint256 burnPrice = getCurrentPriceToBurn();
-        onBurn(tokenId);
+        uint256 pieceId = onBurn(tokenId);
 
         reserve = reserve.sub(burnPrice);
         msg.sender.transfer(burnPrice);
 
-        emit Burned(tokenId, burnPrice, reserve);
+        emit Burned(tokenId, pieceId, burnPrice, reserve);
     }
 
     // if supply 0, mint price = 0.001
@@ -111,6 +111,6 @@ abstract contract Curve is IERC721, IERC721Enumerable {
         return burnPrice;
     }
 
-    function onMint(uint256 tokenId) internal virtual;
-    function onBurn(uint256 tokenId) internal virtual;
+    function onMint(uint256 tokenId) internal virtual returns (uint256 pieceId);
+    function onBurn(uint256 tokenId) internal virtual returns (uint256 pieceId);
 }

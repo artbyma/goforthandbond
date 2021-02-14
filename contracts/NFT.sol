@@ -83,7 +83,7 @@ contract NFT is ERC721("Go forth and bond", "BONDLOVE"), Ownable, Curve {
         return pieces[numPieces];
     }
 
-    function onMint(uint256 tokenId) internal override {
+    function onMint(uint256 tokenId) internal override returns (uint256 pieceId) {
         _mint(msg.sender, tokenId);
 
         PieceRecord storage currentPiece = getCurrentPiece();
@@ -98,10 +98,13 @@ contract NFT is ERC721("Go forth and bond", "BONDLOVE"), Ownable, Curve {
 
         currentPiece.tokenIds.push(tokenId);
         tokenIdToPieceId[tokenId] = numPieces;
+
+        return tokenIdToPieceId[tokenId];
     }
 
-    function onBurn(uint256 tokenId) internal override {
+    function onBurn(uint256 tokenId) internal override  returns (uint256 pieceId) {
         _burn(tokenId);
+        return tokenIdToPieceId[tokenId];
     }
 
     // Public API
