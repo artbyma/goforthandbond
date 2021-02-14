@@ -124,7 +124,7 @@ export default function HomePage() {
         </p>
         <p>
           The contract also allows anyone to sell their editions back to the contract
-          at whatever the current price is (there is a 1% spread), thereby burning it.
+          at whatever the current price is (minus a 5% fee going to the artist), thereby burning it.
           As the circulating supply decreases, the price goes down.
         </p>
         <p>

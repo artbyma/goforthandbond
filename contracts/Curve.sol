@@ -10,13 +10,9 @@ import "openzeppelin-solidity/contracts/token/ERC721/IERC721Enumerable.sol";
 
 abstract contract Curve is IERC721, IERC721Enumerable {
     using SafeMath for uint256;
-    // linear bonding curve
-    // 99.5% going into reserve.
-    // 0.5% going to creator.
 
-    // this is currently 0.5%
-    uint256 public initMintPrice = 0.02 ether; // at 0
-    uint256 public initBurnPrice = 0.000995 ether; // at 1
+    uint256 public initMintPrice = 0.01 ether;    // at 0
+    uint256 public initBurnPrice = 0.0095 ether;  // at 1
 
     // You technically do not need to keep tabs on the reserve
     // because it uses linear pricing
