@@ -50,6 +50,16 @@ task("deploy", "Deploy the contract", async (args, hre) => {
 });
 
 
+task("set-uri", "Set the base url")
+  .addParam("contract", "The NFT contract address")
+  .addParam("uri", "The metadata base uri")
+  .setAction(async (args, hre) =>
+  {
+    const contract = await getContract(hre, args.contract);
+    const result = await (await contract.setBaseURI(args.uri || "https://goforthandbond.by-ma.art/api/hearts/metadata/1")).wait();
+  });
+
+
 task("mint", "Mint a token")
     .addParam("contract", "The NFT contract address")
     .setAction(async (args, hre) =>
