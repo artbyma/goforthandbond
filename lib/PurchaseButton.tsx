@@ -49,6 +49,7 @@ export function PurchaseButton() {
       if (active) {
         await doPurchase();
       } else {
+        // @ts-ignore
         if (await askToConnect()) {
           //await doPurchase();
         }
@@ -60,6 +61,7 @@ export function PurchaseButton() {
   }
 
   return <Fragment>
+    {/* @ts-ignore*/}
     <ConnectModal {...modalProps} />
     <button
         disabled={busy}
