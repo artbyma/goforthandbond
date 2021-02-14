@@ -9,7 +9,6 @@ export default async function handler(req: NextApiRequest, res) {
 
   const contract = await getContract();
   const info = await getHeartPieceByToken(contract, intTokenId);
-  console.log(info);
 
   const editionId = info.ids.indexOf(intTokenId) + 1;
   const pieceId = info.pieceId;

@@ -1,6 +1,9 @@
 /** @jsxRuntime classic /
 /** @jsx jsx */
 import { css, jsx } from '@emotion/react'
+import { Fragment } from 'react';
+import {useAsyncValue} from "../lib/useAsyncValue";
+import {formatEther} from "ethers/lib/utils";
 
 function HomePage() {
   return  <div css={css`
@@ -85,24 +88,7 @@ function HomePage() {
             margin: 20px;
           }
         `}>
-          <div>
-            <strong>Current Supply</strong>
-            <div style={{fontSize: '24px', fontWeight: 'bold'}}>
-              456
-            </div>
-          </div>
-          <div>
-            <strong># Unique Pieces</strong>
-            <div style={{fontSize: '24px', fontWeight: 'bold'}}>
-              33
-            </div>
-          </div>
-          <div>
-            <strong>Current Price</strong>
-            <div style={{fontSize: '24px', fontWeight: 'bold'}}>
-              Ξ 0.3
-            </div>
-          </div>
+          <Stats />
         </div>
         <Button>Connect Wallet</Button>
       </div>
@@ -172,6 +158,32 @@ function HomePage() {
       </div>
     </div>
   </div>;
+}
+
+
+function Stats(props: any) {
+  const [value, {loading}] = useAsyncValue(() => fetch('/api/hearts/data').then(x => x.json()));
+
+  return <Fragment>
+    <div>
+      <strong>Current Supply</strong>
+      <div style={{fontSize: '24px', fontWeight: 'bold'}}>
+        {loading ? '...' : value.totalSupply}
+      </div>
+    </div>
+    <div>
+      <strong># Unique Pieces</strong>
+      <div style={{fontSize: '24px', fontWeight: 'bold'}}>
+        {loading ? '...' : value.numPieces}
+      </div>
+    </div>
+    <div>
+      <strong>Current Price</strong>
+      <div style={{fontSize: '24px', fontWeight: 'bold'}}>
+        Ξ {loading ? '...' : formatEther(value.mintPrice)}
+      </div>
+    </div>
+  </Fragment>
 }
 
 
