@@ -14,7 +14,7 @@ import "openzeppelin-solidity/contracts/access/Ownable.sol";
 import "./Curve.sol";
 
 
-contract NFT is ERC721("Go forth and bond", "BONDLOVE"), Ownable, Curve {
+contract NFT is ERC721("Love on a Curve", "BONDLOVE"), Ownable, Curve {
     using SafeMath for uint256;
 
     uint256 MAX_TOKENS_PER_PIECE = 9;
