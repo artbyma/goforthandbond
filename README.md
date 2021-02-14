@@ -5,6 +5,8 @@ Generative, Dynamic, Collectively-Experienced Artworks on Ethereum.
 
 Development:
 
+    $ npx hardhat deploy --network localhost
+
     # Test minting and burning 
     $ npx hardhat mint --contract 0x5FbDB2315678afecb367f032d93F642f64180aa3 --network localhost
     $ npx hardhat burn --token 2 --contract 0x5FbDB2315678afecb367f032d93F642f64180aa3 --network localhost

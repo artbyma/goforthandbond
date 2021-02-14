@@ -61,7 +61,7 @@ task("mint", "Mint a token")
   console.log('Token ID: ', result.events[1].args.tokenId.toString());
   console.log('Reserve After Mint: ', formatEther(result.events[1].args.reserveAfterMint));
   console.log("New price is: " + formatEther((await contract.getCurrentPriceToMint()).toString()));
-  console.log("Piece data: " + (await contract.getPiece(2)));
+  console.log("Piece data: " + (await contract.getPiece(result.events[1].args.pieceId)));
 });
 
 

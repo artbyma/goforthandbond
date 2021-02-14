@@ -79,6 +79,12 @@ const abi = [
       {
         "indexed": true,
         "internalType": "uint256",
+        "name": "pieceId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
         "name": "priceReceived",
         "type": "uint256"
       },
@@ -103,6 +109,12 @@ const abi = [
       },
       {
         "indexed": true,
+        "internalType": "uint256",
+        "name": "pieceId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
         "internalType": "uint256",
         "name": "pricePaid",
         "type": "uint256"
@@ -295,6 +307,11 @@ const abi = [
       {
         "components": [
           {
+            "internalType": "uint256",
+            "name": "pieceNumber",
+            "type": "uint256"
+          },
+          {
             "internalType": "uint256[]",
             "name": "tokenIds",
             "type": "uint256[]"
@@ -345,6 +362,11 @@ const abi = [
     "outputs": [
       {
         "components": [
+          {
+            "internalType": "uint256",
+            "name": "pieceNumber",
+            "type": "uint256"
+          },
           {
             "internalType": "uint256[]",
             "name": "tokenIds",
