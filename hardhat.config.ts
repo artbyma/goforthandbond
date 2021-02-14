@@ -1,5 +1,6 @@
 import { task } from "hardhat/config";
 import "@nomiclabs/hardhat-waffle";
+import "@nomiclabs/hardhat-etherscan";
 import {HardhatRuntimeEnvironment} from "hardhat/types";
 import {formatEther} from "ethers/lib/utils";
 
