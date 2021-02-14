@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@emotion/react": "^11.1.5",
     "next": "^10.0.6",
     "openzeppelin-solidity": "^3.4.0",
     "react": "^17.0.1",
