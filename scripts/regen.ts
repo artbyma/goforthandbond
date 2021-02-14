@@ -7,6 +7,7 @@ import * as hre from "hardhat";
 import * as path from "path";
 import * as fs from "fs";
 import * as util from 'util';
+const FfmpegCommand = require('fluent-ffmpeg');
 import {getContract} from "../hardhat.config";
 const streamPipeline = util.promisify(require('stream').pipeline)
 
@@ -117,7 +118,20 @@ async function renderPiece(pieceIdx: number, data: {
     },
   });
 
-  console.log('todo: sync to s3')
+  console.log("Generate png")
+  const command = new FfmpegCommand(filename)
+      .on('end', function () {
+      })
+      .on('error', function (err) {
+        console.log('Error: ' + err.message);
+      })
+      .screenshots({
+        timestamps: [3],
+        filename: `${pieceIdx}.png`,
+        folder: ipfsdir,
+      });
+
+  return filename;
 }
 
 
@@ -125,6 +139,7 @@ async function main() {
   const contract = await getContract(hre, "0x5FbDB2315678afecb367f032d93F642f64180aa3");
   const numPieces = await contract.numPieces();
 
+  const videoFiles = [];
   for (let i=1; i<=numPieces; i++) {
     const piece = await contract.getPiece(i);
     console.log(`Rendering ${i} with seed ${piece.randomSeed.toNumber()} and states: ${piece.states.join(':')}`);
