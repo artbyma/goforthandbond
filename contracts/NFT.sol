@@ -30,6 +30,7 @@ contract NFT is ERC721("Go forth and bond", "BONDLOVE"), Ownable, Curve {
 
     // Public piece structure, with dynamic fields.
     struct Piece {
+        uint256 pieceNumber;
         uint256[] tokenIds;
         uint256 startedAt;
         uint256 endedAt;
@@ -114,6 +115,8 @@ contract NFT is ERC721("Go forth and bond", "BONDLOVE"), Ownable, Curve {
         piece.startedAt = p.startedAt;
         piece.scheduledEndAt = p.scheduledEndAt;
         piece.endedAt = p.endedAt;
+
+        piece.pieceNumber = pieceId;
 
         // Random seed is the timestamp of the previous piece
         if (pieceId > 1) {
