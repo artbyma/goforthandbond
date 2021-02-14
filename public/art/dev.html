@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body {
+            background-color: #ffffff;
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+<script src="https://cdn.jsdelivr.net/npm/three@0.125.2/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.125.2/examples/js/postprocessing/EffectComposer.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.125.2/examples/js/postprocessing/RenderPass.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.125.2/examples/js/postprocessing/BloomPass.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.125.2/examples/js/shaders/CopyShader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.125.2/examples/js/shaders/ConvolutionShader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.125.2/examples/js/postprocessing/ShaderPass.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.125.2/examples/js/shaders/LuminosityHighPassShader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.125.2/examples/js/postprocessing/UnrealBloomPass.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.125.2/examples/js/controls/OrbitControls.js"></script>
+<script src="script.js"></script>
+<script>
+  function handleChange(e) {
+    const i = document.querySelector("input");
+    setPosition(i.value);
+    render();
+  }
+</script>
+<script>
+    init({
+      seed: Date.now(),
+      size: 800,
+      tokens: Array(Math.ceil(Math.random() * 9)).fill(1).map(x => Math.random() < 0.5),
+      //tokens: [true, true]
+    });
+    loop(true);
+</script>
+
+<input type="range" max="900" min="0" step="1" oninput="handleChange()"></input>
+</body>
+</html>
