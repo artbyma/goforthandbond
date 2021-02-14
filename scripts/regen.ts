@@ -11,7 +11,10 @@ import {getContract} from "../hardhat.config";
 const streamPipeline = util.promisify(require('stream').pipeline)
 
 
-function getRenderHTMLFile() {
+function getRenderHTMLFile(info: {
+  seed: number,
+  tokens: boolean[]
+}) {
   const artdir = path.resolve(__dirname, '../public', 'art');
   const script = fs.readFileSync(path.join(artdir, 'script.js'))
 
@@ -44,7 +47,8 @@ function getRenderHTMLFile() {
 <script>
     init({
         size: 800,
-        seed: 5
+        seed: ${info.seed},
+        tokens: ${JSON.stringify(info.tokens)}
     });
 </script>
 <script>
@@ -70,7 +74,7 @@ async function renderPiece(pieceIdx: number, data: {
   seed: number,
   tokens: boolean[]
 }) {
-  const content = getRenderHTMLFile();
+  const content = getRenderHTMLFile(data);
 
   const response = await fetch('http://localhost:3090/api/generate', {
     method: 'POST',
@@ -124,7 +128,7 @@ async function main() {
   for (let i=1; i<=numPieces; i++) {
     const piece = await contract.getPiece(i);
     console.log(`Rendering ${i} with seed ${piece.randomSeed.toNumber()} and states: ${piece.states.join(':')}`);
-    await renderPiece(i, {
+    await renderPiece(i, await {
       seed: piece.randomSeed.toNumber(),
       tokens: piece.states,
     });
