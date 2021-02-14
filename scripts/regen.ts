@@ -148,6 +148,8 @@ async function main() {
       tokens: piece.states,
     });
   }
+
+  console.log('Sync: ' + 'aws s3 sync --acl public-read . s3://gobond/hearts/')
 }
 
 
