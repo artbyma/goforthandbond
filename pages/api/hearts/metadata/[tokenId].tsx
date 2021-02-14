@@ -16,8 +16,8 @@ export default async function handler(req: NextApiRequest, res) {
   res.end(JSON.stringify({
     "name": `Love on a Curve #${pieceId}, Edition ${editionId}`,
     "description": "A Generative, Dynamic, Collectively-Experienced Artwork.",
-    "image": `/api/hearts/image/${pieceId}`,
-    "animation_url": `/api/hearts/video/${pieceId}`,
+    "image": `http://goforthandbond.by-ma.art/api/hearts/image/${pieceId}`,
+    "animation_url": `http://goforthandbond.by-ma.art/api/hearts/video/${pieceId}`,
     "attributes": [
       {
         "display_type": "number",
