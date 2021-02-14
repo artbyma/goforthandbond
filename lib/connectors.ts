@@ -8,7 +8,7 @@ import { LatticeConnector } from '@web3-react/lattice-connector'
 
 
 const RPC_URL = "";
-const APP_NAME = "Mahin NFT";
+const APP_NAME = "Love on a Curve";
 const POLLING_INTERVAL = 12000;
 
 

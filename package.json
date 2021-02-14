@@ -20,6 +20,7 @@
     "@web3-react/trezor-connector": "^6.1.6",
     "@web3-react/walletconnect-connector": "^6.1.6",
     "@web3-react/walletlink-connector": "^6.1.6",
+    "dotenv": "^8.2.0",
     "fluent-ffmpeg": "^2.1.2",
     "next": "^10.0.6",
     "openzeppelin-solidity": "^3.4.0",

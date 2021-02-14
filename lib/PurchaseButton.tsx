@@ -17,7 +17,7 @@ export function PurchaseButton() {
   const doPurchase = async () => {
     const withSigner = contract.connect(library.getSigner());
 
-    const [price] = await contract.getCurrentPriceToMint();
+    const price = await contract.getCurrentPriceToMint();
     let tx;
 
     try {
@@ -38,7 +38,7 @@ export function PurchaseButton() {
       return;
     }
 
-    router.push('/thanks');
+    window.location.reload();
   }
 
   const [askToConnect, modalProps] = getImperativeModal();

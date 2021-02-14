@@ -66,7 +66,7 @@ contract NFT is ERC721("Go forth and bond", "BONDLOVE"), Ownable, Curve {
         }
         else {
             // Initial segment length
-            newSegmentLength = 5 days;
+            newSegmentLength = 2 days;
         }
 
         // Increase the piece count

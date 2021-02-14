@@ -5,6 +5,8 @@ import { Fragment } from 'react';
 import {useAsyncValue} from "../lib/useAsyncValue";
 import {formatEther} from "ethers/lib/utils";
 import {PurchaseButton} from "../lib/PurchaseButton";
+import {useWeb3React} from "../lib/web3wallet/core";
+import {useContract} from "../lib/useContract";
 
 
 export default function HomePage() {
@@ -95,6 +97,9 @@ export default function HomePage() {
         <PurchaseButton />
       </div>
     </div>
+
+    <Gallery />
+
     <div css={css`
       display: flex;
       justify-content: space-between;
@@ -160,6 +165,94 @@ export default function HomePage() {
       </div>
     </div>
   </div>;
+}
+
+
+function Gallery() {
+  const { library, active, account } = useWeb3React();
+  const contract = useContract();
+
+  const [items, {loading}] = useAsyncValue(async () => {
+    if (!contract) { return []; }
+    let result: {tokenId: string, piece: any, editionId: number}[] = [];
+    const balance = await contract.balanceOf(account);
+    for (let i=0; i<balance; i++) {
+      const tokenId = await contract.tokenOfOwnerByIndex(account, i);
+      const piece = await contract.getPieceForToken(tokenId);
+      const editionId = piece.tokenIds.map(t => t.toNumber()).indexOf(tokenId.toNumber()) + 1;
+      result.push({tokenId, piece, editionId});
+    }
+    return result;
+  }, [active, library])
+
+  const [burnPrice] = useAsyncValue(async () => {
+    if (!contract) { return; }
+    return await contract.getCurrentPriceToBurn();
+  }, [active, library])
+
+  if (!active || loading || !items.length) {
+    return null;
+  }
+  
+  return <div css={css`
+    margin: 40px 0 60px 0;
+    
+    strong {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 18px;
+      font-weight: normal;
+      border-bottom: 1px solid black;
+    }
+    
+    .grid {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    
+    .item {
+      display: flex;
+      flex-direction: column;
+    }
+    .item span {
+      color: gray;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    img {
+      width: 250px;
+    }
+    
+    button {
+      border: 0;
+      margin-left: 15px;
+      background: #333333;
+      color: white;
+      padding: 0.4em;
+      border-radius: 0.1em;
+    }
+  `}
+  >
+    <strong>
+      Your Editions
+    </strong>
+
+    <div className={"grid"}>
+      {items.map(item => {
+        return <div className={"item"}>
+          <a href={`/api/hearts/live/${item.piece.pieceNumber}`}><img src={`/api/hearts/image/${item.piece.pieceNumber}`} /></a>
+          <span>
+          Piece #{item.piece.pieceNumber.toString()}, Edition {item.editionId}
+
+          <button>Burn Ξ for {formatEther(burnPrice)}</button>
+        </span>
+        </div>
+      })}
+    </div>
+  </div>
 }
 
 

@@ -1,8 +1,10 @@
 import { task } from "hardhat/config";
 import "@nomiclabs/hardhat-waffle";
-import * as fs from "fs";
 import {HardhatRuntimeEnvironment} from "hardhat/types";
 import {formatEther} from "ethers/lib/utils";
+
+require('dotenv').config({path: '.env.local'});
+
 
 task("deploy", "Deploy the contract", async (args, hre) => {
   let sourceCodeSubmitters: any[] = [];
@@ -13,13 +15,13 @@ task("deploy", "Deploy the contract", async (args, hre) => {
     console.log('  ...[waiting to mine]')
     await contract.deployed();
 
-    // sourceCodeSubmitters.push(async () => {
-    //   console.log(`  ...[${name}]`)
-    //   await run("verify:verify", {
-    //     address: contract.address,
-    //     constructorArguments: args
-    //   });
-    // })
+    sourceCodeSubmitters.push(async () => {
+      console.log(`  ...[${name}]`)
+      await hre.run("verify:verify", {
+        address: contract.address,
+        constructorArguments: args
+      });
+    })
 
     return contract;
   }
@@ -89,6 +91,18 @@ export async function getContract(hre: HardhatRuntimeEnvironment, address: strin
 // You need to export an object to set up your config
 // Go to https://hardhat.org/config/ to learn more
 
-export default {
+module.exports = {
   solidity: "0.7.3",
+  defaultNetwork: "rinkeby",
+  networks: {
+    rinkeby: {
+      url: process.env.RINKEBY_JSON_RPC_URL,
+      accounts: {
+        mnemonic: process.env.RINKEBY_MNEMONIC
+      }
+    }
+  },
+  etherscan: {
+    apiKey: process.env.ETHERSCAN_API_KEY
+  }
 };

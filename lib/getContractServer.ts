@@ -4,7 +4,7 @@
 import {ethers} from "ethers";
 import {nftAbi} from "./useContract";
 
-const provider = new ethers.providers.JsonRpcProvider(process.env.JSONRPC_URL);
+const provider = new ethers.providers.JsonRpcProvider(process.env.NEXT_JSON_RPC_URL);
 
 export function getContract() {
   return new ethers.Contract(process.env.NEXT_PUBLIC_NFT_ADDRESS, nftAbi, provider);
