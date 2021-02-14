@@ -6,7 +6,7 @@ import {formatEther} from "ethers/lib/utils";
 
 task("deploy", "Deploy the contract", async (args, hre) => {
   let sourceCodeSubmitters: any[] = [];
-  async function deployContract(name, args) {
+  async function deployContract(name: string, args: any) {
     console.log(`Deploying ${name}...`);
     const Class = await hre.ethers.getContractFactory(name);
     const contract = await Class.deploy(...args);
@@ -80,7 +80,7 @@ task("burn", "Burn a token")
 });
 
 
-async function getContract(hre: HardhatRuntimeEnvironment, address: string) {
+export async function getContract(hre: HardhatRuntimeEnvironment, address: string) {
   const signers = await hre.ethers.getSigners();
   const Abi = (await hre.artifacts.readArtifact("NFT")).abi;
   return new hre.ethers.Contract(address, Abi, signers[0]);
