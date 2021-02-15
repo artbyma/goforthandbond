@@ -18,6 +18,7 @@ export default async function handler(req: NextApiRequest, res) {
     "description": "A Generative, Dynamic, Collectively-Experienced Artwork.",
     "image": `http://goforthandbond.by-ma.art/api/hearts/image/${pieceId}`,
     "animation_url": `http://goforthandbond.by-ma.art/api/hearts/video/${pieceId}`,
+    "external_url": `http://goforthandbond.by-ma.art/api/hearts/live/${pieceId}`,
     "attributes": [
       {
         "display_type": "number",
