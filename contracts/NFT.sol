@@ -7,7 +7,7 @@ import "openzeppelin-solidity/contracts/token/ERC721/IERC721.sol";
 import "openzeppelin-solidity/contracts/token/ERC721/IERC721Metadata.sol";
 import "openzeppelin-solidity/contracts/token/ERC721/IERC721Enumerable.sol";
 import "openzeppelin-solidity/contracts/token/ERC721/IERC721Receiver.sol";
-import "openzeppelin-solidity/contracts/token/ERC721/ERC721.sol";
+import "./ERC721.sol";
 import "openzeppelin-solidity/contracts/introspection/ERC165.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "openzeppelin-solidity/contracts/access/Ownable.sol";
@@ -17,21 +17,22 @@ import "./Curve.sol";
 contract NFT is ERC721("Love on a Curve", "BONDLOVE"), Ownable, Curve {
     using SafeMath for uint256;
 
-    uint256 MAX_TOKENS_PER_PIECE = 9;
+    uint256 constant MAX_TOKENS_PER_PIECE = 9;
 
     // Each token owns one piece. Only a limited number of tokens can own a
     // single piece.  A new piece is created once the previous one is full.
+    // To save gas, we use uint64's here
     struct PieceRecord {
-        uint256[] tokenIds;
-        uint256 startedAt;
-        uint256 endedAt;
-        uint256 scheduledEndAt;
+        uint64[] tokenIds;
+        uint64 startedAt;
+        uint64 endedAt;
+        uint64 scheduledEndAt;
     }
 
     // Public piece structure, with dynamic fields.
     struct Piece {
         uint256 pieceNumber;
-        uint256[] tokenIds;
+        uint64[] tokenIds;
         uint256 startedAt;
         uint256 endedAt;
         uint256 scheduledEndAt;
@@ -53,15 +54,15 @@ contract NFT is ERC721("Love on a Curve", "BONDLOVE"), Ownable, Curve {
     function makeNewPiece() private returns (PieceRecord storage) {
         uint256 newSegmentLength;
         if (numPieces > 0) {
-            PieceRecord storage currentPiece = getCurrentPiece();
-            currentPiece.endedAt = block.timestamp;
-            uint256 lastSegmentLength = currentPiece.endedAt.sub(currentPiece.startedAt);
+            PieceRecord storage currentPiece = pieces[numPieces];
+            currentPiece.endedAt = uint64(block.timestamp);
+            uint64 lastSegmentLength = currentPiece.endedAt - currentPiece.startedAt; // cannot underflow
 
             // If we filled up early, make the next segment longer. If we ended late, make the next segment longer.
             if (currentPiece.endedAt < currentPiece.scheduledEndAt) {
-                newSegmentLength = lastSegmentLength.mul(75).div(100);
+                newSegmentLength = lastSegmentLength * 75 / 100;   // Should not overflow, plenty of space in uint64
             } else {
-                newSegmentLength = lastSegmentLength.mul(125).div(100);
+                newSegmentLength = lastSegmentLength * 125 / 100;
             }
         }
         else {
@@ -73,30 +74,23 @@ contract NFT is ERC721("Love on a Curve", "BONDLOVE"), Ownable, Curve {
         numPieces = numPieces + 1;
         uint256 pieceId = numPieces;
 
-        pieces[pieceId].startedAt = block.timestamp;
-        pieces[pieceId].scheduledEndAt = block.timestamp.add(newSegmentLength);
+        pieces[pieceId].startedAt = uint64(block.timestamp);
+        pieces[pieceId].scheduledEndAt = uint64(block.timestamp + newSegmentLength);   // Should not overflow, plenty of space in uint64
 
         return pieces[pieceId];
     }
-
-    function getCurrentPiece() private view returns (PieceRecord storage) {
-        return pieces[numPieces];
-    }
-
+    
     function onMint(uint256 tokenId) internal override returns (uint256 pieceId) {
         _mint(msg.sender, tokenId);
 
-        PieceRecord storage currentPiece = getCurrentPiece();
+        PieceRecord storage currentPiece = pieces[numPieces];
 
         // We generate a new piece if the old one is full, or if it's segment timed out.
-        bool isPieceFull = currentPiece.tokenIds.length >= MAX_TOKENS_PER_PIECE;
-        bool hasTimedOut = block.timestamp >= currentPiece.scheduledEndAt;
-
-        if (isPieceFull || hasTimedOut) {
+        if ((currentPiece.tokenIds.length >= MAX_TOKENS_PER_PIECE) || block.timestamp >= currentPiece.scheduledEndAt) {
             currentPiece = makeNewPiece();
         }
 
-        currentPiece.tokenIds.push(tokenId);
+        currentPiece.tokenIds.push(uint64(tokenId));
         tokenIdToPieceId[tokenId] = numPieces;
 
         return tokenIdToPieceId[tokenId];
