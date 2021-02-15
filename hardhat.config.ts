@@ -4,7 +4,7 @@ import "@nomiclabs/hardhat-etherscan";
 import {HardhatRuntimeEnvironment} from "hardhat/types";
 import {formatEther} from "ethers/lib/utils";
 
-require('dotenv').config({path: '.env.hardhat'});
+require('dotenv').config({path: '.env.local'});
 
 
 task("deploy", "Deploy the contract", async (args, hre) => {
