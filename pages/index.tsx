@@ -1,7 +1,7 @@
 /** @jsxRuntime classic /
 /** @jsx jsx */
 import { css, jsx } from '@emotion/react'
-import { Fragment } from 'react';
+import { Fragment, useCallback, useState } from 'react';
 import {useAsyncValue} from "../lib/useAsyncValue";
 import {formatEther} from "ethers/lib/utils";
 import {PurchaseButton} from "../lib/PurchaseButton";
@@ -239,13 +239,15 @@ function Gallery() {
   `}
   >
     <strong>
-      Your Editions
+      Your Editions <small>(NB: It takes about 10 mins for them to update)</small>
     </strong>
 
     <div className={"grid"}>
       {items.map(item => {
         return <div className={"item"}>
-          <a href={`/api/hearts/live/${item.piece.pieceNumber}`}><img src={`/api/hearts/image/${item.piece.pieceNumber}`} /></a>
+          <a href={`/api/hearts/live/${item.piece.pieceNumber}`}>
+            <DynamicImage url={`/api/hearts/image/${item.piece.pieceNumber}`} />
+          </a>
           <span>
             Piece #{item.piece.pieceNumber.toString()}, Edition {item.editionId}
             <BurnButton tokenId={item.tokenId}>Burn for Ξ {parseFloat(formatEther(burnPrice)).toFixed(3)}</BurnButton>
@@ -254,6 +256,33 @@ function Gallery() {
       })}
     </div>
   </div>
+}
+
+
+function DynamicImage(props: {
+  url: string
+}) {
+  const [failed, setFailed] = useState(false);
+  const handleLoad = useCallback(() => {
+
+  }, []);
+
+  const handleError = useCallback(() => {
+    setFailed(true);
+  }, []);
+
+  if (failed) {
+    return <div style={{width: '100%', height: '250px', aspectRatio: '1', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid silver'}}>
+      <div>Rendering...</div>
+      <div>View Live</div>
+    </div>
+  }
+
+  return <img
+      src={props.url}
+      onLoad={handleLoad}
+      onError={handleError}
+  />
 }
 
 
