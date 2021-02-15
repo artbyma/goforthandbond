@@ -6,12 +6,17 @@ import {NextApiRequest} from "next";
 
 
 export default async function page(req: NextApiRequest, res) {
-  const {query: { pieceId, size }} = req;
+  let {query: { pieceId, size }} = req;
 
   const artdir = path.resolve('./public', 'art');
   const script = fs.readFileSync(path.join(artdir, 'script.js'))
 
   const contract = await getContract();
+
+  if (pieceId === 'current') {
+    pieceId = await contract.numPieces();
+  }
+
   const info = await getHeartPiece(contract, parseInt(pieceId as string));
 
   res.send(`

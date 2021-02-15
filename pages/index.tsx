@@ -70,7 +70,7 @@ export default function HomePage() {
         <strong>
           Current Piece
         </strong>
-        <iframe src={`/api/hearts/live/1?size=600`} css={css`
+        <iframe src={`/api/hearts/live/current?size=600`} css={css`
           border: 0;
           width: 600px;
           height: 600px;
