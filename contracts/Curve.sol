@@ -38,19 +38,11 @@ abstract contract Curve is IERC721, IERC721Enumerable {
     }
 
     /*
-    With one mint front-runned, a front-runner will make a loss.
-    With linear price increases of 0.001, it's not profitable.
-    BECAUSE it costs 0.012 ETH at 50 gwei to mint (storage/smart contract costs) + 0.5% loss from creator fee.
-    It becomes more profitable to front-run if there are multiple buys that can be spotted
-    from multiple buyers in one block. However, depending on gas price, it depends how profitable it is.
-    Because the planned buffer on the front-end is 0.01 ETH, it's not profitable to front-run any normal amounts.
-    Unless, someone creates a specific contract to start bulk minting.
-    To curb speculation, users can only mint one per transaction (unless you create a separate contract to do this).
-    Thus, ultimately, at this stage, while front-running can be profitable,
-    it is not generally feasible at this small scale.
-    Thus, for the sake of usability, there's no additional locks here for front-running protection.
-    A lock would be to have a transaction include the current price:
-    But that means, that only one neolastic per block would be minted (unless you can guess price rises).
+    The original neolastics contract has a note about front-running here. As far as I can tell, this concern comes
+    from the fact that the front-end includes a buffer when sending payment, which might allow a bot to jump in front,
+    get the non-buffered price, then burn their own token for the now increased curve price once the front-runned
+    tx makes it onto the chain. We do not intend to include a frontend buffer for now, but if we did, I believe the
+    same logic applies: Our small price increases + creator fee + gas price should make it unprofitable.
     */
     function mint() public virtual payable returns (uint256 _tokenId) {
         // you can only mint one at a time.
