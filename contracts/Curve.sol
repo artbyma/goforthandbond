@@ -11,8 +11,8 @@ import "openzeppelin-solidity/contracts/token/ERC721/IERC721Enumerable.sol";
 abstract contract Curve is IERC721, IERC721Enumerable {
     using SafeMath for uint256;
 
-    uint256 public initMintPrice = 0.01 ether;    // at 0
-    uint256 public initBurnPrice = 0.0095 ether;  // at 1
+    uint256 public initMintPrice = 0.005 ether;    // at 0
+    uint256 public initBurnPrice = 0.00475 ether;   // at 1
 
     // You technically do not need to keep tabs on the reserve
     // because it uses linear pricing
@@ -67,7 +67,7 @@ abstract contract Curve is IERC721, IERC721Enumerable {
         // disburse
         uint256 reserveCut = getReserveCut();
         reserve = reserve.add(reserveCut);
-        creator.transfer(mintPrice.sub(reserveCut)); // 0.5%
+        creator.transfer(mintPrice.sub(reserveCut));
 
         if (msg.value.sub(mintPrice) > 0) {
             msg.sender.transfer(msg.value.sub(mintPrice)); // excess/padding/buffer
