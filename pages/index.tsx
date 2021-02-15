@@ -7,6 +7,7 @@ import {formatEther} from "ethers/lib/utils";
 import {PurchaseButton} from "../lib/PurchaseButton";
 import {useWeb3React} from "../lib/web3wallet/core";
 import {useContract} from "../lib/useContract";
+import {BurnButton} from "../lib/BurnButton";
 
 
 export default function HomePage() {
@@ -213,27 +214,23 @@ function Gallery() {
     .item {
       display: flex;
       flex-direction: column;
+      margin-right: 4px;
+      margin-bottom: 15px;
     }
+    
     .item span {
       color: gray;
       text-align: center;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      font-size: 14px;
     }
     
     img {
-      width: 250px;
+      width: 240px;
     }
-    
-    button {
-      border: 0;
-      margin-left: 15px;
-      background: #333333;
-      color: white;
-      padding: 0.4em;
-      border-radius: 0.1em;
-    }
+   
   `}
   >
     <strong>
@@ -245,9 +242,8 @@ function Gallery() {
         return <div className={"item"}>
           <a href={`/api/hearts/live/${item.piece.pieceNumber}`}><img src={`/api/hearts/image/${item.piece.pieceNumber}`} /></a>
           <span>
-          Piece #{item.piece.pieceNumber.toString()}, Edition {item.editionId}
-
-          <button>Burn Ξ for {formatEther(burnPrice)}</button>
+            Piece #{item.piece.pieceNumber.toString()}, Edition {item.editionId}
+            <BurnButton tokenId={item.tokenId}>Burn for Ξ {parseFloat(formatEther(burnPrice)).toFixed(3)}</BurnButton>
         </span>
         </div>
       })}
