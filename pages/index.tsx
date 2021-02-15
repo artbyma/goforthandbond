@@ -35,19 +35,19 @@ export default function HomePage() {
     `}>
       Love on a Curve
     </h1>
-    <p style={{marginTop: '0em'}}>
+    <p style={{marginTop: '0em', lineHeight: '1.9'}}>
       <span css={css`
         background: #da3b42;
-        padding: 0.4em 0.4em;
+        padding: 0.4em 0.4em 0.3em;
         color: white;
         font-weight: bold;
-        line-height: 2;
       `}>
         Generative, Dynamic, Collectively-Experienced Artworks.
       </span>
 
-      {" "} They are bought and sold on a bonding curve, and change for all owners to reflect
-      the transactions of the curve.
+      {" "} These NFTs are bought and sold on a bonding curve, and change for all owners to reflect
+      the transactions of others the curve. While you have no control over how your own piece looks,
+      you can change artworks owned by others - by burning your own.
     </p>
     <div css={css`
       display: flex;
