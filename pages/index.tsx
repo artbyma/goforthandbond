@@ -8,6 +8,7 @@ import {PurchaseButton} from "../lib/PurchaseButton";
 import {useWeb3React} from "../lib/web3wallet/core";
 import {useContract} from "../lib/useContract";
 import {BurnButton} from "../lib/BurnButton";
+import Head from "next/head";
 
 
 export default function HomePage() {
@@ -20,6 +21,10 @@ export default function HomePage() {
     line-height: 1.6;
   `}
   >
+    <Head>
+      <title>Love on a Curve</title>
+      {process.browser && <script defer async data-domain="goforthandbond.by-ma.art" src="https://plausible.io/js/plausible.js" />}
+    </Head>
     <div css={css`
       text-align: right;
       margin-top: 30px;
