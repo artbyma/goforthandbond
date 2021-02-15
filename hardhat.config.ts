@@ -57,7 +57,7 @@ task("set-uri", "Set the base url")
   .setAction(async (args, hre) =>
   {
     const contract = await getContract(hre, args.contract);
-    const result = await (await contract.setBaseURI(args.uri || "https://goforthandbond.by-ma.art/api/hearts/metadata/1")).wait();
+    const result = await (await contract.setBaseURI(args.uri || "https://goforthandbond.by-ma.art/api/hearts/metadata/")).wait();
   });
 
 
