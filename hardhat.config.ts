@@ -104,7 +104,7 @@ export async function getContract(hre: HardhatRuntimeEnvironment, address: strin
 
 module.exports = {
   solidity: "0.7.3",
-  defaultNetwork: "rinkeby",
+  //defaultNetwork: "rinkeby",
   networks: {
     rinkeby: {
       url: process.env.RINKEBY_JSON_RPC_URL,
