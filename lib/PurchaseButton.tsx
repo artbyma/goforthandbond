@@ -22,7 +22,7 @@ export function PurchaseButton() {
 
     try {
       tx = await withSigner.mint({
-        value: price
+        value: price.add("10000000000000000")
       })
     } catch(e) {
       console.log(e);
