@@ -8,53 +8,32 @@ import {PurchaseButton} from "../lib/PurchaseButton";
 import {useWeb3React} from "../lib/web3wallet/core";
 import {useContract} from "../lib/useContract";
 import {BurnButton} from "../lib/BurnButton";
-import Head from "next/head";
+import Layout from "../lib/Layout";
+import Link from "next/link";
+import {DynamicImage} from "../lib/DynamicImage";
 
 
 export default function HomePage() {
-  return  <div css={css`
-    max-width: 1000px;
-    margin: 0 auto;
-    
-    font-family: 'Spartan', sans-serif;
-    font-size: 16px;
-    line-height: 1.6;
-  `}
-  >
-    <Head>
-      <title>Love on a Curve</title>
-      {process.browser && <script defer async data-domain="goforthandbond.by-ma.art" src="https://plausible.io/js/plausible.js" />}
-    </Head>
-    <div css={css`
-      text-align: right;
-      margin-top: 30px;
-      font-size: 14px;
-    `}>
-      <a href={"https://twitter.com/artbyma"}>a BYMA project</a>
-    </div>
-    <h1 css={css`
-      font-family: 'Amatic SC', cursive;
-      font-size: 55px;
-      margin-top: 0;
-      margin-bottom: 0.2em;
-    `}>
-      Love on a Curve
-    </h1>
-    <p style={{marginTop: '0em', lineHeight: '1.9'}}>
-      <span css={css`
-        background: #da3b42;
-        padding: 0.4em 0.4em 0.3em;
-        color: white;
-        font-weight: bold;
-      `}>
-        Generative, Dynamic, Collectively-Experienced Artworks.
-      </span>
-
-      {" "} These NFTs are bought and sold on a bonding curve, and change for all owners to reflect
-      the transactions of others on the curve. While you have no control over how your own piece looks,
-      you can change artworks owned by others - but only by burning your own.
-    </p>
+  return  <Layout>
     <div>
+      <Link href={"/gallery"}>
+        <a
+          css={css`
+            border: 0;
+            margin: 10px 0;
+            margin-right: 20px;
+            background: #3f51b5;
+            color: white;
+            cursor: pointer;
+            padding: 0.7em;
+            text-decoration: none;
+            border-radius: 0.1em;
+            display: inline-block;
+          `}
+        >
+          Gallery
+        </a>
+      </Link>
       <a
           href={"https://opensea.io/collection/love-on-a-curve"}
           css={css`
@@ -121,7 +100,7 @@ export default function HomePage() {
       </div>
     </div>
 
-    <Gallery />
+    <YourEditions />
 
     <div css={css`
       display: flex;
@@ -192,11 +171,11 @@ export default function HomePage() {
       {" "}&bull;{" "}
       <a href={"https://github.com/artbyma/goforthandbond"}>Github</a>
     </div>
-  </div>;
+  </Layout>;
 }
 
 
-function Gallery() {
+function YourEditions() {
   const { library, active, account } = useWeb3React();
   const contract = useContract();
 
@@ -278,33 +257,6 @@ function Gallery() {
       })}
     </div>
   </div>
-}
-
-
-function DynamicImage(props: {
-  url: string
-}) {
-  const [failed, setFailed] = useState(false);
-  const handleLoad = useCallback(() => {
-
-  }, []);
-
-  const handleError = useCallback(() => {
-    setFailed(true);
-  }, []);
-
-  if (failed) {
-    return <div style={{width: '100%', height: '250px', aspectRatio: '1', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid silver'}}>
-      <div>Rendering...</div>
-      <div>View Live</div>
-    </div>
-  }
-
-  return <img
-      src={props.url}
-      onLoad={handleLoad}
-      onError={handleError}
-  />
 }
 
 
