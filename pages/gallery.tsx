@@ -99,9 +99,9 @@ function GalleryView() {
           <div style={{fontSize: '12px'}} className={"label"}>
             <span>#{item.number} (<a href={`/api/hearts/live/${item.number}`} target={"_blank"}>live</a>)</span>
 
-            <span title={"Time this piece was mintable"}>
+            {item.length > 0 ? <span title={"Time this piece was mintable"}>
               {formatLength(item.length)}
-            </span>
+            </span> : null}
 
             {features[idx] ? <span style={{marginLeft: '10px'}}>
               {
