@@ -7,9 +7,9 @@ import * as hre from "hardhat";
 import * as path from "path";
 import * as fs from "fs";
 import * as util from 'util';
-const FfmpegCommand = require('fluent-ffmpeg');
 import {getContract} from "../hardhat.config";
 const streamPipeline = util.promisify(require('stream').pipeline)
+const exec = util.promisify(require('child_process').exec);
 
 
 function getRenderHTMLFile(info: {
@@ -76,11 +76,12 @@ async function renderPiece(pieceIdx: number, data: {
   tokens: boolean[]
 }) {
   const content = getRenderHTMLFile(data);
-
-  const response = await fetch('http://localhost:3090/api/generate', {
+  
+  // Generate the video
+  const response = await fetch(`${process.env.AE_RENDER_BASE}/api/generate`, {
     method: 'POST',
     headers: {
-      'Authorization': 'foobar'
+      'Authorization': process.env.AE_RENDER_KEY
     },
     body: JSON.stringify({
       content: content
@@ -92,10 +93,10 @@ async function renderPiece(pieceIdx: number, data: {
   while (true) {
     let response;
     try {
-      response = await fetch('http://localhost:3090/api/status?id=' + id, {
+      response = await fetch(`${process.env.AE_RENDER_BASE}/api/status?id=` + id, {
         method: 'GET',
         headers: {
-          'Authorization': 'foobar'
+          'Authorization': process.env.AE_RENDER_KEY
         },
       });
     } catch (e) {
@@ -111,12 +112,13 @@ async function renderPiece(pieceIdx: number, data: {
   console.log('download file')
   const ipfsdir = path.join(__dirname, '..', 'ipfs', 'hearts');
   const filename = path.join(ipfsdir, `${pieceIdx}.mp4`);
-  await download(filename, 'http://localhost:3090/api/download?id=' + id, {
+  await download(filename, `${process.env.AE_RENDER_BASE}/api/download?id=` + id, {
     method: 'GET',
     headers: {
-      'Authorization': 'foobar'
+      'Authorization': process.env.AE_RENDER_KEY
     },
   });
+}
 
   console.log("Generate png")
   const command = new FfmpegCommand(filename)
