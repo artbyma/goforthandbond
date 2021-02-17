@@ -120,38 +120,73 @@ async function renderPiece(pieceIdx: number, data: {
   });
 }
 
-  console.log("Generate png")
-  const command = new FfmpegCommand(filename)
-      .on('end', function () {
-      })
-      .on('error', function (err) {
-        console.log('Error: ' + err.message);
-      })
-      .screenshots({
-        timestamps: [3],
-        filename: `${pieceIdx}.png`,
-        folder: ipfsdir,
-      });
 
-  return filename;
+async function renderContractPiece(contract, i) {
+  const piece = await contract.getPiece(i);
+  console.log(`Rendering ${i} with seed ${piece.randomSeed.toNumber()} and states: ${piece.states.join(':')}`);
+  await renderPiece(i, await {
+    seed: piece.randomSeed.toNumber(),
+    tokens: piece.states,
+  });
+
+  console.log('generate pngs')
+  await exec(`ffmpeg -ss 10 -i ipfs/hearts/${i}.mp4 -frames:v 1 ipfs/hearts/${i}.png  -y`) ;
+  console.log('aws sync')
+  await exec(`aws s3 sync --acl public-read ./ipfs/hearts s3://gobond/hearts`);
+
+  console.log('updating on opensea')
+  for (const token of piece.tokenIds) {
+    await fetch(`https://api.opensea.io/api/v1/asset/0x75dde2c445a112d270d766697330be0db700636e/${token}/?force_update=true`).catch(
+      e => { console.log(e); })
+  }
 }
 
-
 async function main() {
-  const contract = await getContract(hre, "0x5FbDB2315678afecb367f032d93F642f64180aa3");
-  const numPieces = await contract.numPieces();
+  const contract = await getContract(hre, "0x75Dde2c445a112D270d766697330bE0Db700636E");
 
-  const videoFiles = [];
-  for (let i=1; i<=numPieces; i++) {
-    const piece = await contract.getPiece(i);
-    console.log(`Rendering ${i} with seed ${piece.randomSeed.toNumber()} and states: ${piece.states.join(':')}`);
-    await renderPiece(i, await {
-      seed: piece.randomSeed.toNumber(),
-      tokens: piece.states,
-    });
+  // Render all pieces
+  const all = false;
+  // Render specific tokens
+  const specificTokens = [];
+  // Process events since a specific block
+  const sinceBlock = 0;
+
+  let pieceNumbers = new Set();
+
+  if (all) {
+    const numPieces = await contract.numPieces();
+    for (let i=1; i<=numPieces; i++) { pieceNumbers.add(i); }
+  }
+  else if (specificTokens?.length) {
+    for (const tokenId of specificTokens) {
+      const pieceId = (await contract.getPieceForToken(tokenId)).pieceNumber.toNumber();
+      pieceNumbers.add(pieceId);
+    }
+  }
+  else if (sinceBlock > 0) {
+    const pastMints = await contract.queryFilter(contract.filters.Minted(), sinceBlock, 'latest');
+    const pastBurns = await contract.queryFilter(contract.filters.Burned(), sinceBlock, 'latest');
+
+    for (const mint of pastMints) {
+      pieceNumbers.add(mint.args.pieceId.toNumber());
+    }
+    for (const mint of pastBurns) {
+      pieceNumbers.add(mint.args.pieceId.toNumber());
+    }
+  }
+  else {
+    throw new Error("Set one of the options.")
   }
 
-  console.log('Sync: ' + 'aws s3 sync --acl public-read . s3://gobond/hearts/')
+  // Submit a renderjob for each
+  const p = [];
+  for (let i of pieceNumbers) {
+    p.push(renderContractPiece(contract, i));
+    await new Promise(resolve => {
+      setTimeout(resolve, 2000)
+    })
+  }
+  await Promise.all(p)
 }
 
 
