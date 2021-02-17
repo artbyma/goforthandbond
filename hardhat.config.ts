@@ -104,14 +104,19 @@ export async function getContract(hre: HardhatRuntimeEnvironment, address: strin
 // You need to export an object to set up your config
 // Go to https://hardhat.org/config/ to learn more
 
-module.exports = {
+export default {
   solidity: "0.7.3",
-  //defaultNetwork: "rinkeby",
   networks: {
     rinkeby: {
       url: process.env.RINKEBY_JSON_RPC_URL,
       accounts: {
         mnemonic: process.env.RINKEBY_MNEMONIC
+      }
+    },
+    main: {
+      url: process.env.MAIN_JSON_RPC_URL,
+      accounts: {
+        mnemonic: process.env.MAIN_MNEMONIC
       }
     }
   },
