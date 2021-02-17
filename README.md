@@ -5,7 +5,7 @@ Generative, Dynamic, Collectively-Experienced Artworks on Ethereum.
 
 Development:
     
-    $ npx hardhat tests
+    $ npx hardhat tests --network hardhat
 
     # Deploy the contract
     $ npx hardhat deploy --network localhost

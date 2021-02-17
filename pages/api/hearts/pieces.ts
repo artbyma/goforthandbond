@@ -15,7 +15,8 @@ export default async function handler(req, res) {
       number: piece.pieceNumber.toNumber(),
       numOwners: piece.states.filter(isActive => isActive).length,
       numHearts: piece.states.length,
-      length: piece.endedAt.sub(piece.startedAt).toNumber()
+      length: piece.endedAt.sub(piece.startedAt).toNumber(),
+      seed: piece.randomSeed.toNumber()
     };
   })
 
