@@ -64,11 +64,11 @@ function GalleryView() {
     <div className={"grid"}>
       {pieces.map(item => {
         return <div className={"item"}>
-          <a href={`/api/hearts/live/${item.number}`}>
+          <a href={`/api/hearts/live/${item.number}`} target={"_blank"}>
             <DynamicImage url={`/api/hearts/image/${item.number}`} />
           </a>
           <span style={{fontSize: '12px'}}>
-            #{item.number} <a href={`/api/hearts/live/${item.number}`}>live</a>
+            #{item.number} <a href={`/api/hearts/live/${item.number}`}  target={"_blank"}>live</a>
         </span>
         </div>
       })}
