@@ -51,8 +51,8 @@ export default function HomePage() {
       </span>
 
       {" "} These NFTs are bought and sold on a bonding curve, and change for all owners to reflect
-      the transactions of others the curve. While you have no control over how your own piece looks,
-      you can change artworks owned by others - by burning your own.
+      the transactions of others on the curve. While you have no control over how your own piece looks,
+      you can change artworks owned by others - but only by burning your own.
     </p>
     <div css={css`
       display: flex;
