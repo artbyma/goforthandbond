@@ -20,9 +20,11 @@ export function PurchaseButton() {
     const price = await contract.getCurrentPriceToMint();
     let tx;
 
+    //let buffer = "20000000000000000";
+    let buffer = 0;
     try {
       tx = await withSigner.mint({
-        value: price.add("10000000000000000")
+        value: price.add(buffer)
       })
     } catch(e) {
       console.log(e);
