@@ -99,6 +99,10 @@ function GalleryView() {
           <div style={{fontSize: '12px'}} className={"label"}>
             <span>#{item.number} (<a href={`/api/hearts/live/${item.number}`} target={"_blank"}>live</a>)</span>
 
+            <span title={"Time this piece was mintable"}>
+              {formatLength(item.length)}
+            </span>
+
             {features[idx] ? <span style={{marginLeft: '10px'}}>
               {
                 features[idx].map(feature => {
@@ -129,6 +133,26 @@ function GalleryView() {
       })}
     </div>
   </div>
+}
+
+
+export function formatLength(seconds: number) {
+  if (seconds < 90) {
+    return `${seconds}s`;
+  }
+  else {
+    let minutes = Math.floor(seconds / 60);
+    seconds = seconds % 60;
+
+    if (minutes < 90) {
+      return `${minutes}m ${seconds}s`
+    }
+    else {
+      let hours = Math.floor(minutes / 60);
+      minutes = minutes % 60;
+      return `${hours}h ${minutes}m ${seconds}s`
+    }
+  }
 }
 
 
