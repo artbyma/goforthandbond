@@ -54,6 +54,23 @@ export default function HomePage() {
       the transactions of others on the curve. While you have no control over how your own piece looks,
       you can change artworks owned by others - but only by burning your own.
     </p>
+    <div>
+      <a
+          href={"https://opensea.io/collection/love-on-a-curve"}
+          css={css`
+        border: 0;
+        margin: 10px 0;
+        background: #333333;
+        color: white;
+        padding: 0.7em;
+        text-decoration: none;
+        border-radius: 0.1em;
+        display: inline-block;
+      `}
+      >
+        Browse on OpenSea
+      </a>
+    </div>
     <div css={css`
       display: flex;
       flex-direction: row;
@@ -169,6 +186,11 @@ export default function HomePage() {
           so that OpenSea and other platforms have an easy way to display the pieces.
         </p>
       </div>
+    </div>
+    <div>
+      <a href={"https://etherscan.io/address/0x75Dde2c445a112D270d766697330bE0Db700636E"}>Etherscan</a>
+      {" "}&bull;{" "}
+      <a href={"https://github.com/artbyma/goforthandbond"}>Github</a>
     </div>
   </div>;
 }
