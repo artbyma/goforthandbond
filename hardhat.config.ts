@@ -3,16 +3,17 @@ import "@nomiclabs/hardhat-waffle";
 import "@nomiclabs/hardhat-etherscan";
 import {HardhatRuntimeEnvironment} from "hardhat/types";
 import {formatEther} from "ethers/lib/utils";
+import {BigNumber} from "ethers";
 
 require('dotenv').config({path: '.env.local'});
 
 
 task("deploy", "Deploy the contract", async (args, hre) => {
   let sourceCodeSubmitters: any[] = [];
-  async function deployContract(name: string, args: any) {
+  async function deployContract(name: string, args: any, opts: any) {
     console.log(`Deploying ${name}...`);
     const Class = await hre.ethers.getContractFactory(name);
-    const contract = await Class.deploy(...args);
+    const contract = await Class.deploy(...args, opts);
     console.log('  ...[waiting to mine]')
     await contract.deployed();
 
@@ -29,7 +30,8 @@ task("deploy", "Deploy the contract", async (args, hre) => {
 
   await hre.run('compile');
 
-  const nft = await deployContract('NFT', []);
+  const gasPrice = undefined; //BigNumber.from("100000000000");
+  const nft = await deployContract('NFT', [], {gasPrice});
   console.log("ERC721 deployed to:", nft.address);
 
   // console.log("Making Curve the minter");
